@@ -1,19 +1,17 @@
 {
   "include": ["src", "test"],
-  "exclude": ["test/deno.test.ts"],
   "compilerOptions": {
     "module": "esnext",
     "moduleDetection": "force",
     "esModuleInterop": true,
     "isolatedModules": true,
     "useDefineForClassFields": true,
-    "target": "es2018",
+    "target": "es2020",
     "noEmit": true,
-    "allowImportingTsExtensions": true,
-    "lib": ["es2022", "dom"],
+    "lib": ["es2022"],
     "strict": true,
     "declaration": true,
     "declarationMap": true,
-    "moduleResolution": "bundler"
+    "moduleResolution": "Bundler"
   }
 }
