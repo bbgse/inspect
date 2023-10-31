@@ -4,47 +4,53 @@
  * MIT Licensed
  */
 
-import inspectArray from './array.js'
-import inspectTypedArray from './typedarray.js'
-import inspectDate from './date.js'
-import inspectFunction from './function.js'
-import inspectMap from './map.js'
-import inspectNumber from './number.js'
-import inspectBigInt from './bigint.js'
-import inspectRegExp from './regexp.js'
-import inspectSet from './set.js'
-import inspectString from './string.js'
-import inspectSymbol from './symbol.js'
-import inspectPromise from './promise.js'
-import inspectClass from './class.js'
-import inspectObject from './object.js'
-import inspectArguments from './arguments.js'
-import inspectError from './error.js'
-import inspectHTMLElement, { inspectHTMLCollection } from './html.js'
+import inspectArray from "./array.js";
+import inspectTypedArray from "./typedarray.js";
+import inspectDate from "./date.js";
+import inspectFunction from "./function.js";
+import inspectMap from "./map.js";
+import inspectNumber from "./number.js";
+import inspectBigInt from "./bigint.js";
+import inspectRegExp from "./regexp.js";
+import inspectSet from "./set.js";
+import inspectString from "./string.js";
+import inspectSymbol from "./symbol.js";
+import inspectPromise from "./promise.js";
+import inspectClass from "./class.js";
+import inspectObject from "./object.js";
+import inspectArguments from "./arguments.js";
+import inspectError from "./error.js";
+import inspectHTMLElement, { inspectHTMLCollection } from "./html.js";
 
-import { normaliseOptions } from './helpers.js'
-import type { Inspect, Options } from './types.js'
+import { normaliseOptions } from "./helpers.js";
+import type { Inspect, Options } from "./types.js";
 
-const symbolsSupported = typeof Symbol === 'function' && typeof Symbol.for === 'function'
-const chaiInspect = symbolsSupported ? Symbol.for('chai/inspect') : '@@chai/inspect'
-let nodeInspect: false | symbol = false
+const symbolsSupported =
+  typeof Symbol === "function" && typeof Symbol.for === "function";
+const chaiInspect = symbolsSupported
+  ? Symbol.for("chai/inspect")
+  : "@@chai/inspect";
+let nodeInspect: false | symbol = false;
 try {
   // eslint-disable-next-line global-require
   // @ts-ignore
-  const nodeUtil = require('util')
-  nodeInspect = nodeUtil.inspect ? nodeUtil.inspect.custom : false
+  const nodeUtil = require("util");
+  nodeInspect = nodeUtil.inspect ? nodeUtil.inspect.custom : false;
 } catch (noNodeInspect) {
-  nodeInspect = false
+  nodeInspect = false;
 }
 
-const constructorMap = new WeakMap<Function, Inspect>()
-const stringTagMap: Record<string, Inspect> = {}
+const constructorMap = new WeakMap<Function, Inspect>();
+const stringTagMap: Record<string, Inspect> = {};
 const baseTypesMap = {
-  undefined: (value: undefined, options: Options) => options.stylize('undefined', 'undefined'),
-  null: (value: null, options: Options) => options.stylize('null', 'null'),
+  undefined: (value: undefined, options: Options) =>
+    options.stylize("undefined", "undefined"),
+  null: (value: null, options: Options) => options.stylize("null", "null"),
 
-  boolean: (value: boolean, options: Options) => options.stylize(String(value), 'boolean'),
-  Boolean: (value: Boolean, options: Options) => options.stylize(String(value), 'boolean'),
+  boolean: (value: boolean, options: Options) =>
+    options.stylize(String(value), "boolean"),
+  Boolean: (value: Boolean, options: Options) =>
+    options.stylize(String(value), "boolean"),
 
   number: inspectNumber,
   Number: inspectNumber,
@@ -70,8 +76,10 @@ const baseTypesMap = {
   Promise: inspectPromise,
 
   // WeakSet, WeakMap are totally opaque to us
-  WeakSet: (value: WeakSet<any>, options: Options) => options.stylize('WeakSet{…}', 'special'),
-  WeakMap: (value: WeakMap<any, unknown>, options: Options) => options.stylize('WeakMap{…}', 'special'),
+  WeakSet: (value: WeakSet<any>, options: Options) =>
+    options.stylize("WeakSet{…}", "special"),
+  WeakMap: (value: WeakMap<any, unknown>, options: Options) =>
+    options.stylize("WeakMap{…}", "special"),
 
   Arguments: inspectArguments,
   Int8Array: inspectTypedArray,
@@ -84,113 +92,131 @@ const baseTypesMap = {
   Float32Array: inspectTypedArray,
   Float64Array: inspectTypedArray,
 
-  Generator: () => '',
-  DataView: () => '',
-  ArrayBuffer: () => '',
+  Generator: () => "",
+  DataView: () => "",
+  ArrayBuffer: () => "",
 
   Error: inspectError,
 
   HTMLCollection: inspectHTMLCollection,
   NodeList: inspectHTMLCollection,
-} as const
+} as const;
 
 // eslint-disable-next-line complexity
-const inspectCustom = (value: object, options: Options, type: string): string => {
-  if (chaiInspect in value && typeof (value as any)[chaiInspect] === 'function') {
-    return ((value as any)[chaiInspect] as Function)(options)
+const inspectCustom = (
+  value: object,
+  options: Options,
+  type: string,
+): string => {
+  if (
+    chaiInspect in value &&
+    typeof (value as any)[chaiInspect] === "function"
+  ) {
+    return ((value as any)[chaiInspect] as Function)(options);
   }
 
-  if (nodeInspect && nodeInspect in value && typeof (value as any)[nodeInspect] === 'function') {
-    return ((value as any)[nodeInspect] as Function)(options.depth, options)
+  if (
+    nodeInspect &&
+    nodeInspect in value &&
+    typeof (value as any)[nodeInspect] === "function"
+  ) {
+    return ((value as any)[nodeInspect] as Function)(options.depth, options);
   }
 
-  if ('inspect' in value && typeof value.inspect === 'function') {
-    return value.inspect(options.depth, options)
+  if ("inspect" in value && typeof value.inspect === "function") {
+    return value.inspect(options.depth, options);
   }
 
-  if ('constructor' in value && constructorMap.has(value.constructor)) {
-    return constructorMap.get(value.constructor)!(value, options)
+  if ("constructor" in value && constructorMap.has(value.constructor)) {
+    return constructorMap.get(value.constructor)!(value, options);
   }
 
   if (stringTagMap[type]) {
-    return stringTagMap[type](value, options)
+    return stringTagMap[type](value, options);
   }
 
-  return ''
-}
+  return "";
+};
 
-const toString = Object.prototype.toString
+const toString = Object.prototype.toString;
 
 // eslint-disable-next-line complexity
 export function inspect(value: unknown, opts: Partial<Options> = {}): string {
-  const options = normaliseOptions(opts, inspect)
-  const { customInspect } = options
-  let type = value === null ? 'null' : typeof value
-  if (type === 'object') {
-    type = toString.call(value).slice(8, -1)
+  const options = normaliseOptions(opts, inspect);
+  const { customInspect } = options;
+  let type = value === null ? "null" : typeof value;
+  if (type === "object") {
+    type = toString.call(value).slice(8, -1);
   }
 
   // If it is a base value that we already support, then use Loupe's inspector
   if (type in baseTypesMap) {
-    return (baseTypesMap[type as keyof typeof baseTypesMap] as Inspect)(value, options)
+    return (baseTypesMap[type as keyof typeof baseTypesMap] as Inspect)(
+      value,
+      options,
+    );
   }
 
   // If `options.customInspect` is set to true then try to use the custom inspector
   if (customInspect && value) {
-    const output = inspectCustom(value, options, type)
+    const output = inspectCustom(value, options, type);
     if (output) {
-      if (typeof output === 'string') return output
-      return inspect(output, options)
+      if (typeof output === "string") return output;
+      return inspect(output, options);
     }
   }
 
-  const proto = value ? Object.getPrototypeOf(value) : false
+  const proto = value ? Object.getPrototypeOf(value) : false;
   // If it's a plain Object then use Loupe's inspector
   if (proto === Object.prototype || proto === null) {
-    return inspectObject(value as object, options)
+    return inspectObject(value as object, options);
   }
 
   // Specifically account for HTMLElements
   // @ts-ignore
-  if (value && typeof HTMLElement === 'function' && value instanceof HTMLElement) {
-    return inspectHTMLElement(value, options)
+  if (
+    value &&
+    typeof HTMLElement === "function" &&
+    value instanceof HTMLElement
+  ) {
+    return inspectHTMLElement(value, options);
   }
 
-  if ('constructor' in (value as object)) {
+  if ("constructor" in (value as object)) {
     // If it is a class, inspect it like an object but add the constructor name
     if ((value as object).constructor !== Object) {
-      return inspectClass(value as { new (...args: any[]): unknown }, options)
+      return inspectClass(value as { new (...args: any[]): unknown }, options);
     }
 
     // If it is an object with an anonymous prototype, display it as an object.
-    return inspectObject(value as object, options)
+    return inspectObject(value as object, options);
   }
 
   // last chance to check if it's an object
   if (value === Object(value)) {
-    return inspectObject(value as object, options)
+    return inspectObject(value as object, options);
   }
 
   // We have run out of options! Just stringify the value
-  return (options as Options).stylize(String(value), type)
+  return (options as Options).stylize(String(value), type);
 }
 
 export function registerConstructor(constructor: Function, inspector: Inspect) {
   if (constructorMap.has(constructor)) {
-    return false
+    return false;
   }
-  constructorMap.set(constructor, inspector)
-  return true
+  constructorMap.set(constructor, inspector);
+  return true;
 }
 
 export function registerStringTag(stringTag: string, inspector: Inspect) {
   if (stringTag in stringTagMap) {
-    return false
+    return false;
   }
-  stringTagMap[stringTag] = inspector
-  return true
+  stringTagMap[stringTag] = inspector;
+  return true;
 }
 
-export const custom = chaiInspect
+export const custom = chaiInspect;
 
-export default inspect
+export default inspect;

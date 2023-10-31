@@ -1,32 +1,37 @@
-import { inspectList, inspectProperty } from './helpers.js'
-import type { Inspect, Options } from './types.js'
+import { inspectList, inspectProperty } from "./helpers.js";
+import type { Inspect, Options } from "./types.js";
 
-export default function inspectObject(object: object, options: Options): string {
-  const properties = Object.getOwnPropertyNames(object)
-  const symbols = Object.getOwnPropertySymbols ? Object.getOwnPropertySymbols(object) : []
+export default function inspectObject(
+  object: object,
+  options: Options,
+): string {
+  const properties = Object.getOwnPropertyNames(object);
+  const symbols = Object.getOwnPropertySymbols
+    ? Object.getOwnPropertySymbols(object)
+    : [];
   if (properties.length === 0 && symbols.length === 0) {
-    return '{}'
+    return "{}";
   }
-  options.truncate -= 4
-  options.seen = options.seen || []
+  options.truncate -= 4;
+  options.seen = options.seen || [];
   if (options.seen.indexOf(object) >= 0) {
-    return '[Circular]'
+    return "[Circular]";
   }
-  options.seen.push(object)
+  options.seen.push(object);
   const propertyContents = inspectList(
-    properties.map(key => [key, object[key as keyof typeof object]]),
+    properties.map((key) => [key, object[key as keyof typeof object]]),
     options,
-    inspectProperty as Inspect
-  )
+    inspectProperty as Inspect,
+  );
   const symbolContents = inspectList(
-    symbols.map(key => [key, object[key as keyof typeof object]]),
+    symbols.map((key) => [key, object[key as keyof typeof object]]),
     options,
-    inspectProperty as Inspect
-  )
-  options.seen.pop()
-  let sep = ''
+    inspectProperty as Inspect,
+  );
+  options.seen.pop();
+  let sep = "";
   if (propertyContents && symbolContents) {
-    sep = ', '
+    sep = ", ";
   }
-  return `{ ${propertyContents}${sep}${symbolContents} }`
+  return `{ ${propertyContents}${sep}${symbolContents} }`;
 }

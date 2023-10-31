@@ -1,15 +1,18 @@
-import { truncate } from './helpers.js'
-import type { Options } from './types.js'
+import { truncate } from "./helpers.js";
+import type { Options } from "./types.js";
 
 export default function inspectDate(dateObject: Date, options: Options) {
-  const stringRepresentation = dateObject.toJSON()
+  const stringRepresentation = dateObject.toJSON();
 
   if (stringRepresentation === null) {
-    return 'Invalid Date'
+    return "Invalid Date";
   }
 
-  const split = stringRepresentation.split('T')
-  const date = split[0]
+  const split = stringRepresentation.split("T");
+  const date = split[0];
   // If we need to - truncate the time portion, but never the date
-  return options.stylize(`${date}T${truncate(split[1], options.truncate - date.length - 1)}`, 'date')
+  return options.stylize(
+    `${date}T${truncate(split[1], options.truncate - date.length - 1)}`,
+    "date",
+  );
 }
