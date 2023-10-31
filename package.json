@@ -17,7 +17,6 @@
     "lib/*"
   ],
   "scripts": {
-    "bench": "node bench",
     "test": "mocha",
     "pretest": "npm run build:lib",
     "build": "npm run build:lib && npm run build:esm-bundle && npm run build:cjs-bundle",
@@ -29,13 +28,13 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "prettier": {
-    "printWidth": 120,
+    "printWidth": 80,
     "tabWidth": 2,
     "useTabs": false,
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "es5",
-    "arrowParens": "avoid",
+    "semi": true,
+    "singleQuote": false,
+    "trailingComma": "all",
+    "arrowParens": "always",
     "bracketSpacing": true
   },
   "dependencies": {
