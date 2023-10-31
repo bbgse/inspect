@@ -1,7 +1,3 @@
-![npm](https://img.shields.io/npm/v/loupe?logo=npm)
-![Build](https://github.com/chaijs/loupe/workflows/Build/badge.svg?branch=master)
-![Codecov branch](https://img.shields.io/codecov/c/github/chaijs/loupe/master?logo=codecov)
-
 # What is loupe?
 
 Loupe turns the object you give it into a string. It's similar to Node.js' `util.inspect()` function, but it works cross platform, in most modern browsers as well as Node.
@@ -14,18 +10,10 @@ Loupe turns the object you give it into a string. It's similar to Node.js' `util
 
     $ npm install loupe
 
-### Browsers
-
-You can also use it within the browser; install via npm and use the `loupe.js` file found within the download. For example:
-
-```html
-<script src="./node_modules/loupe/loupe.js"></script>
-```
-
 ## Usage
 
 ``` js
-const { inspect } = require('loupe');
+import * as inspect from 'loupe';
 ```
 
 ```js
