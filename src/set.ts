@@ -11,7 +11,7 @@ function arrayFromSet(set: Set<unknown>) {
 }
 
 export default function inspectSet(set: Set<unknown>, options: Options): string {
-  if (set.size === 0) return 'Set{}'
+  if (set.size === 0) return 'Set(0) {}'
   options.truncate -= 7
-  return `Set{ ${inspectList(arrayFromSet(set), options)} }`
+  return `Set(${set.size}) { ${inspectList(arrayFromSet(set), options)} }`
 }
