@@ -49,7 +49,7 @@ export const truncator = "…";
 
 type AnsiValue = (typeof ansiColors)[keyof typeof ansiColors];
 
-function colorise<S extends string>(value: S, styleType: string): string {
+function colorize<S extends string>(value: S, styleType: string): string {
   const color: AnsiValue | undefined =
     ansiColors[styles[styleType]] ||
     ansiColors[styleType as keyof typeof ansiColors] ||
@@ -60,7 +60,7 @@ function colorise<S extends string>(value: S, styleType: string): string {
   return `\u001b[${color[0]}m${String(value) as S}\u001b[${color[1]}m`;
 }
 
-export function normaliseOptions(
+export function normalizeOptions(
   {
     showHidden = false,
     depth = 2,
@@ -90,7 +90,7 @@ export function normaliseOptions(
     stylize,
   };
   if (options.colors) {
-    options.stylize = colorise;
+    options.stylize = colorize;
   }
   return options;
 }
