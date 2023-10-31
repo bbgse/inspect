@@ -10,45 +10,32 @@
   "module": "./lib/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bbgse/loupe.git"
+    "url": "https://github.com/bbgse/inspect.git"
   },
   "files": [
-    "loupe.js",
+    "inspect.js",
     "lib/*"
   ],
   "scripts": {
-    "test": "mocha",
+    "test": "vitest",
     "pretest": "npm run build:lib",
     "build": "npm run build:lib && npm run build:esm-bundle && npm run build:cjs-bundle",
     "build:lib": "esbuild \"src/*.ts\" --outdir=lib --format=esm",
-    "build:esm-bundle": "esbuild --bundle src/index.ts --outfile=loupe.js --format=esm",
-    "build:cjs-bundle": "esbuild --bundle src/index.ts --outfile=loupe.js --format=cjs"
+    "build:esm-bundle": "esbuild --bundle src/index.ts --outfile=inspect.js --format=esm",
+    "build:cjs-bundle": "esbuild --bundle src/index.ts --outfile=inspect.js --format=cjs"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
-  },
-  "prettier": {
-    "printWidth": 80,
-    "tabWidth": 2,
-    "useTabs": false,
-    "semi": true,
-    "singleQuote": false,
-    "trailingComma": "all",
-    "arrowParens": "always",
-    "bracketSpacing": true
   },
   "dependencies": {
     "get-func-name": "^2.0.1"
   },
   "devDependencies": {
-    "benchmark": "^2.1.4",
-    "chai": "^5.0.0-alpha.0",
-    "core-js": "^3.33.2",
+    "@types/node": "^20.8.10",
     "esbuild": "^0.19.5",
-    "mocha": "^10.2.0",
-    "nyc": "^15.1.0",
     "prettier": "^3.0.3",
-    "simple-assert": "^2.0.0",
-    "typescript": "^5.2.2"
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
   }
 }

@@ -1,9 +1,3 @@
-/* !
- * loupe
- * Copyright(c) 2013 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-
 import inspectArray from "./array.js";
 import inspectTypedArray from "./typedarray.js";
 import inspectDate from "./date.js";
@@ -20,9 +14,8 @@ import inspectClass from "./class.js";
 import inspectObject from "./object.js";
 import inspectArguments from "./arguments.js";
 import inspectError from "./error.js";
-import inspectHTMLElement, { inspectHTMLCollection } from "./html.js";
 
-import { normaliseOptions } from "./helpers.js";
+import { normalizeOptions } from "./helpers.js";
 import type { Inspect, Options } from "./types.js";
 
 const symbolsSupported =
@@ -97,9 +90,6 @@ const baseTypesMap = {
   ArrayBuffer: () => "",
 
   Error: inspectError,
-
-  HTMLCollection: inspectHTMLCollection,
-  NodeList: inspectHTMLCollection,
 } as const;
 
 // eslint-disable-next-line complexity
@@ -142,7 +132,7 @@ const toString = Object.prototype.toString;
 
 // eslint-disable-next-line complexity
 export function inspect(value: unknown, opts: Partial<Options> = {}): string {
-  const options = normaliseOptions(opts, inspect);
+  const options = normalizeOptions(opts, inspect);
   const { customInspect } = options;
   let type = value === null ? "null" : typeof value;
   if (type === "object") {
@@ -170,16 +160,6 @@ export function inspect(value: unknown, opts: Partial<Options> = {}): string {
   // If it's a plain Object then use Loupe's inspector
   if (proto === Object.prototype || proto === null) {
     return inspectObject(value as object, options);
-  }
-
-  // Specifically account for HTMLElements
-  // @ts-ignore
-  if (
-    value &&
-    typeof HTMLElement === "function" &&
-    value instanceof HTMLElement
-  ) {
-    return inspectHTMLElement(value, options);
   }
 
   if ("constructor" in (value as object)) {
