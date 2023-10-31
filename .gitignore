@@ -9,3 +9,4 @@ loupe.test.js
 loupe.js
 .nyc_output/
 lib/
+.npmrc

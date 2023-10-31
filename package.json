@@ -1,23 +1,15 @@
 {
-  "name": "loupe",
-  "version": "0.0.0-development",
-  "description": "Inspect utility for Node.js and browsers",
-  "homepage": "https://github.com/chaijs/loupe",
+  "name": "@bbgse/loupe",
+  "version": "1.0.0",
+  "description": "Inspect utility for Node.js",
+  "homepage": "https://github.com/bbgse/loupe",
   "license": "MIT",
   "author": "Veselin Todorov <hi@vesln.com>",
-  "contributors": [
-    "Keith Cirkel (https://github.com/keithamus)"
-  ],
   "type": "module",
   "main": "./lib/index.js",
   "module": "./lib/index.js",
-  "browser": {
-    "./index.js": "./loupe.js",
-    "util": false
-  },
   "repository": {
-    "type": "git",
-    "url": "https://github.com/chaijs/loupe"
+    "url": "git+https://github.com/bbgse/loupe.git"
   },
   "files": [
     "loupe.js",
@@ -26,64 +18,15 @@
   "scripts": {
     "bench": "node bench",
     "lint": "eslint --ignore-path .gitignore .",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "test": "mocha",
     "pretest": "npm run build:lib",
     "build": "npm run build:lib && npm run build:esm-bundle && npm run build:cjs-bundle",
     "build:lib": "esbuild \"src/*.ts\" --outdir=lib --format=esm",
     "build:esm-bundle": "esbuild --bundle src/index.ts --outfile=loupe.js --format=esm",
-    "build:cjs-bundle": "esbuild --bundle src/index.ts --outfile=loupe.js --format=cjs",
-    "upload-coverage": "codecov"
+    "build:cjs-bundle": "esbuild --bundle src/index.ts --outfile=loupe.js --format=cjs"
   },
-  "eslintConfig": {
-    "root": true,
-    "parserOptions": {
-      "ecmaVersion": 2020
-    },
-    "env": {
-      "es6": true
-    },
-    "plugins": [
-      "filenames",
-      "prettier"
-    ],
-    "extends": [
-      "strict/es6"
-    ],
-    "rules": {
-      "comma-dangle": "off",
-      "func-style": "off",
-      "no-magic-numbers": "off",
-      "class-methods-use-this": "off",
-      "array-bracket-spacing": "off",
-      "array-element-newline": "off",
-      "space-before-function-paren": "off",
-      "arrow-parens": "off",
-      "template-curly-spacing": "off",
-      "quotes": "off",
-      "generator-star-spacing": "off",
-      "prefer-destructuring": "off",
-      "no-mixed-operators": "off",
-      "id-blacklist": "off",
-      "curly": "off",
-      "semi": [
-        "error",
-        "never"
-      ],
-      "prettier/prettier": [
-        "error",
-        {
-          "printWidth": 120,
-          "tabWidth": 2,
-          "useTabs": false,
-          "semi": false,
-          "singleQuote": true,
-          "trailingComma": "es5",
-          "arrowParens": "avoid",
-          "bracketSpacing": true
-        }
-      ]
-    }
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
   "prettier": {
     "printWidth": 120,
