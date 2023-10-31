@@ -9,7 +9,8 @@
   "main": "./lib/index.js",
   "module": "./lib/index.js",
   "repository": {
-    "url": "git+https://github.com/bbgse/loupe.git"
+    "type": "git",
+    "url": "https://github.com/bbgse/loupe.git"
   },
   "files": [
     "loupe.js",
