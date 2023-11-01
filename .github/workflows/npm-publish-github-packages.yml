@@ -9,6 +9,7 @@ on:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -19,7 +20,8 @@ jobs:
       - run: npm test
 
   package:
-    needs: build
+    name: Package
+    needs: [build]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -42,10 +44,12 @@ jobs:
         with:
           name: package
           path: "*.tgz"
+          if-no-files-found: error
 
   publish:
     name: Publish to GitHub Packages
-    needs: package
+    if: success('build') && success('package')
+    needs: [package]
     runs-on: ubuntu-latest
     permissions:
       contents: read
