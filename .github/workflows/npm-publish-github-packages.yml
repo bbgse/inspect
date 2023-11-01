@@ -47,7 +47,6 @@ jobs:
     name: Publish to GitHub Packages
     needs: package
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'bbgsea'
     permissions:
       contents: read
       packages: write
