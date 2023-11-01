@@ -1,8 +1,8 @@
 # What is inspect
 
-`inspect` turns the object you give it into a string. It's similar to Node.js' `util.inspect()` function, but inspects better :)
+`inspect` turns the object you give it into a string. It's similar to Node.js' `util.inspect()` function.
 
-`inspect` borrows heavily from [chaijs/loupe](https://github.com/chaijs/loupe).
+`inspect` was created from a fork of [chaijs/loupe](https://github.com/chaijs/loupe).
 
 ## Installation
 
