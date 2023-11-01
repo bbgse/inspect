@@ -26,6 +26,6 @@ jobs:
       - name: Install dependencies
         run: npm i
       - name: Compile TypeScript
-        run: npm compile
+        run: npm run compile
       - name: Run Node.js Tests
         run: npm test
