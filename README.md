@@ -1,4 +1,6 @@
-# What is inspect
+# inspect
+
+[![Build](https://github.com/bbgse/inspect/actions/workflows/build.yml/badge.svg)](https://github.com/bbgse/inspect/actions/workflows/build.yml)
 
 `inspect` turns the object you give it into a string. It's similar to Node.js' `util.inspect()` function.
 
