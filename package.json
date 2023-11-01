@@ -18,10 +18,9 @@
   ],
   "scripts": {
     "test": "vitest",
-    "build": "npm run build:lib && npm run build:esm-bundle && npm run build:cjs-bundle",
-    "build:lib": "esbuild \"src/*.ts\" --outdir=lib --format=esm",
-    "build:esm-bundle": "esbuild --bundle src/index.ts --outfile=inspect.js --format=esm",
-    "build:cjs-bundle": "esbuild --bundle src/index.ts --outfile=inspect.js --format=cjs"
+    "compile": "tsc -p tsconfig.json --noEmit",
+    "build": "npm run build:lib",
+    "build:lib": "esbuild \"src/*.ts\" --outdir=lib --bundle --platform=node --target=node18 --format=esm"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
