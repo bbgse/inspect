@@ -8,6 +8,7 @@
   "type": "module",
   "main": "./lib/index.js",
   "module": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/bbgse/inspect.git"
@@ -17,9 +18,11 @@
   ],
   "scripts": {
     "test": "vitest",
-    "compile": "tsc -p tsconfig.json --noEmit",
-    "build": "npm run build:lib",
-    "build:lib": "esbuild \"src/*.ts\" --outdir=lib --bundle --platform=node --target=node18 --format=esm"
+    "compile": "tsc -p tsconfig.json",
+    "clean": "rm -rf lib",
+    "build": "npm run build:lib && npm run build:types",
+    "build:lib": "esbuild \"src/*.ts\" --outdir=lib --bundle --platform=node --target=node18 --format=esm",
+    "build:types": "tsc -p tsconfig-types.json"
   },
   "dependencies": {
     "get-func-name": "^2.0.1"
