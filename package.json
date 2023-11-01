@@ -21,9 +21,6 @@
     "build": "npm run build:lib",
     "build:lib": "esbuild \"src/*.ts\" --outdir=lib --bundle --platform=node --target=node18 --format=esm"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "dependencies": {
     "get-func-name": "^2.0.1"
   },
