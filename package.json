@@ -1,6 +1,6 @@
 {
   "name": "@bbgse/inspect",
-  "version": "5.1.0",
+  "version": "5.1.1",
   "description": "Inspect utility for Node.js",
   "homepage": "https://github.com/bbgse/inspect",
   "license": "MIT",
