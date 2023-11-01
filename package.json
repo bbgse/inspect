@@ -4,7 +4,7 @@
   "description": "Inspect utility for Node.js",
   "homepage": "https://github.com/bbgse/inspect",
   "license": "MIT",
-  "author": "Veselin Todorov <hi@vesln.com>",
+  "author": "bbgse",
   "type": "module",
   "main": "./lib/index.js",
   "module": "./lib/index.js",
@@ -13,7 +13,6 @@
     "url": "https://github.com/bbgse/inspect.git"
   },
   "files": [
-    "inspect.js",
     "lib/*"
   ],
   "scripts": {
