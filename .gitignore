@@ -5,8 +5,7 @@
 npm-debug.log
 *.tmp.js
 /tmp/
-loupe.test.js
-loupe.js
 .nyc_output/
 lib/
 .npmrc
+inspect.js

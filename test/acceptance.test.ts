@@ -1,15 +1,15 @@
-import { expect } from "chai";
+import { expect, describe, it } from "vitest";
 import inspect from "../src";
 
 describe("arrays", () => {
   it("truncates an array of strings rather than just the strings", () => {
-    expect(inspect(["foo", "bar", "baz", "bing"], { truncate: 22 })).to.equal(
+    expect(inspect(["foo", "bar", "baz", "bing"], { truncate: 22 })).toBe(
       "[ 'foo', 'bar', …(2) ]",
     );
   });
 
   it("truncates the string in certain cases, to keep under the truncate threshold", () => {
-    expect(inspect(["foobarbazbing"], { truncate: 15 })).to.equal(
+    expect(inspect(["foobarbazbing"], { truncate: 15 })).toBe(
       "[ 'foobarba…' ]",
     );
   });
@@ -17,11 +17,11 @@ describe("arrays", () => {
 
 describe("objects", () => {
   it("correctly inspects Symbols as object keys", () => {
-    expect(inspect({ [Symbol("foo")]: 1 })).to.equal("{ [Symbol(foo)]: 1 }");
+    expect(inspect({ [Symbol("foo")]: 1 })).toBe("{ [Symbol(foo)]: 1 }");
   });
 
   it("correctly inspects properties and Symbols as object keys", () => {
-    expect(inspect({ foo: 1, [Symbol("foo")]: 1 })).to.equal(
+    expect(inspect({ foo: 1, [Symbol("foo")]: 1 })).toBe(
       "{ foo: 1, [Symbol(foo)]: 1 }",
     );
   });
@@ -30,7 +30,7 @@ describe("objects", () => {
     const obj = {
       inspect: () => 1,
     };
-    expect(inspect(obj, { customInspect: false })).to.equal(
+    expect(inspect(obj, { customInspect: false })).toBe(
       "{ inspect: [Function inspect] }",
     );
   });
@@ -39,14 +39,14 @@ describe("objects", () => {
     const obj = {
       inspect: () => 1,
     };
-    expect(inspect(obj, { customInspect: true })).to.equal("1");
+    expect(inspect(obj, { customInspect: true })).toBe("1");
   });
 
   it("does not use custom inspect functions if `customInspect` is turned off", () => {
     const obj = {
       inspect: () => 1,
     };
-    expect(inspect(obj, { customInspect: false })).to.equal(
+    expect(inspect(obj, { customInspect: false })).toBe(
       "{ inspect: [Function inspect] }",
     );
   });
@@ -55,14 +55,14 @@ describe("objects", () => {
     const obj = {
       inspect: () => "abc",
     };
-    expect(inspect(obj, { customInspect: true })).to.equal("abc");
+    expect(inspect(obj, { customInspect: true })).toBe("abc");
   });
 
   it("inspects custom inspect function result", () => {
     const obj = {
       inspect: () => ["foobarbazbing"],
     };
-    expect(inspect(obj, { customInspect: true, truncate: 15 })).to.equal(
+    expect(inspect(obj, { customInspect: true, truncate: 15 })).toBe(
       "[ 'foobarba…' ]",
     );
   });
@@ -74,7 +74,7 @@ describe("objects", () => {
           options.stylize("Object content", "string"),
       },
     };
-    expect(inspect(obj, { customInspect: true })).to.equal(
+    expect(inspect(obj, { customInspect: true })).toBe(
       "{ sub: Object content }",
     );
   });
@@ -86,7 +86,7 @@ describe("objects", () => {
       },
     };
 
-    expect(inspect(obj, { customInspect: true })).to.equal(
+    expect(inspect(obj, { customInspect: true })).toBe(
       "{ sub: { foo: 'bar' } }",
     );
   });
@@ -94,6 +94,6 @@ describe("objects", () => {
 
 describe("arrays", () => {
   it("can contain anonymous functions", () => {
-    expect(inspect([() => 1])).to.equal("[ [Function] ]");
+    expect(inspect([() => 1])).toBe("[ [Function] ]");
   });
 });

@@ -130,7 +130,6 @@ const inspectCustom = (
 
 const toString = Object.prototype.toString;
 
-// eslint-disable-next-line complexity
 export function inspect(value: unknown, opts: Partial<Options> = {}): string {
   const options = normalizeOptions(opts, inspect);
   const { customInspect } = options;
