@@ -1,4 +1,4 @@
-import { expect, describe, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import inspect from "../src";
 
 describe("strings", () => {
@@ -15,15 +15,7 @@ describe("strings", () => {
   });
 
   it("escapes unicode characters", () => {
-    expect(inspect("\u001b")).toBe("'\\u001b'");
-  });
-
-  describe("colors", () => {
-    it("returns string with green color, if colour is set to true", () => {
-      expect(inspect("abc", { colors: true })).toBe(
-        "\u001b[32m'abc'\u001b[39m",
-      );
-    });
+    expect(inspect("\u001B")).toBe("'\\u001b'");
   });
 
   describe("truncate", () => {

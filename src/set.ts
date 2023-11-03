@@ -1,6 +1,7 @@
 import { inspectList } from "./helpers.js";
-import type { Options } from "./types.js";
+import { InspectFn } from "./options.js";
 
+// TODO: remove
 // IE11 doesn't support `Array.from(set)`
 function arrayFromSet(set: Set<unknown>) {
   const values: unknown[] = [];
@@ -10,11 +11,10 @@ function arrayFromSet(set: Set<unknown>) {
   return values;
 }
 
-export default function inspectSet(
-  set: Set<unknown>,
-  options: Options,
-): string {
-  if (set.size === 0) return "Set(0) {}";
+const inspectSet: InspectFn<Set<unknown>> = (value, options) => {
+  if (value.size === 0) return "Set(0) {}";
   options.truncate -= 7;
-  return `Set(${set.size}) { ${inspectList(arrayFromSet(set), options)} }`;
-}
+  return `Set(${value.size}) { ${inspectList(arrayFromSet(value), options)} }`;
+};
+
+export default inspectSet;

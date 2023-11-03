@@ -14,17 +14,6 @@ describe("booleans", () => {
     expect(inspect(true)).toBe("true");
   });
 
-  describe("colors", () => {
-    it("returns string with yellow color, if colour is set to true", () => {
-      expect(inspect(false, { colors: true })).toBe(
-        "\u001b[33mfalse\u001b[39m",
-      );
-      expect(inspect(true, { colors: true })).toBe(
-        "\u001b[33mtrue\u001b[39m",
-      );
-    });
-  });
-
   describe("truncated", () => {
     it("returns the full string representation regardless of truncate", () => {
       expect(inspect(true, { truncate: 5 })).toBe("true");

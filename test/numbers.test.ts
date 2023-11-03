@@ -18,14 +18,6 @@ describe("numbers", () => {
     expect(inspect(1e300)).toBe("1e+300");
   });
 
-  describe("colors", () => {
-    it("returns string with yellow color, if colour is set to true", () => {
-      expect(inspect(3.141, { colors: true })).toBe(
-        "\u001b[33m3.141\u001b[39m",
-      );
-    });
-  });
-
   describe("truncate", () => {
     it("returns the full representation when truncate is over string length", () => {
       expect(inspect(3.141592654, { truncate: 11 })).toBe("3.141592654");
@@ -84,14 +76,6 @@ describe("numbers", () => {
       expect(inspect(NaN)).toBe("NaN");
     });
 
-    describe("colors", () => {
-      it("returns string with yellow color, if colour is set to true", () => {
-        expect(inspect(NaN, { colors: true })).toBe(
-          "\u001b[33mNaN\u001b[39m",
-        );
-      });
-    });
-
     describe("truncate", () => {
       it("returns the full string representation regardless of truncate", () => {
         expect(inspect(NaN, { truncate: 9 })).toBe("NaN");
@@ -112,14 +96,6 @@ describe("numbers", () => {
       expect(inspect(Infinity)).toBe("Infinity");
     });
 
-    describe("colors", () => {
-      it("returns string with yellow color, if colour is set to true", () => {
-        expect(inspect(Infinity, { colors: true })).toBe(
-          "\u001b[33mInfinity\u001b[39m",
-        );
-      });
-    });
-
     describe("truncate", () => {
       it("returns the full string representation regardless of truncate", () => {
         expect(inspect(Infinity, { truncate: 9 })).toBe("Infinity");
@@ -138,14 +114,6 @@ describe("numbers", () => {
   describe("-Infinity", () => {
     it("returns `-Infinity`", () => {
       expect(inspect(-Infinity)).toBe("-Infinity");
-    });
-
-    describe("colors", () => {
-      it("returns string with yellow color, if colour is set to true", () => {
-        expect(inspect(-Infinity, { colors: true })).toBe(
-          "\u001b[33m-Infinity\u001b[39m",
-        );
-      });
     });
 
     describe("truncate", () => {

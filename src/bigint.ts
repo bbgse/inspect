@@ -1,8 +1,10 @@
 import { truncate, truncator } from "./helpers.js";
-import type { Options } from "./types.js";
+import { InspectFn } from "./options.js";
 
-export default function inspectBigInt(number: bigint, options: Options) {
+const inspectBigInt: InspectFn<bigint> = (number, options) => {
   let nums = truncate(number.toString(), options.truncate - 1);
   if (nums !== truncator) nums += "n";
-  return options.stylize(nums, "bigint");
-}
+  return options.colorize(nums, "bigint");
+};
+
+export default inspectBigInt;

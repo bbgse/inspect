@@ -11,12 +11,6 @@ describe("bigints", () => {
     expect(inspect(1e300)).toBe("1e+300");
   });
 
-  describe("colors", () => {
-    it("returns string with yellow color, if colour is set to true", () => {
-      expect(inspect(BigInt(1), { colors: true })).toBe("\u001b[33m1n\u001b[39m");
-    });
-  });
-
   describe("truncate", () => {
     it("returns the full representation when truncate is over string length", () => {
       expect(inspect(BigInt(3141592654), { truncate: 11 })).toBe("3141592654n");

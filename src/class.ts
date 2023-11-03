@@ -1,24 +1,20 @@
-import inspectObject from "./object.js";
-import type { Options } from "./types.js";
+import inspectObject from './object.js';
+import type { InspectFn } from './options.js';
 
-const toStringTag =
-  typeof Symbol !== "undefined" && Symbol.toStringTag
-    ? Symbol.toStringTag
-    : false;
-
-export default function inspectClass(
-  value: { new (...args: any[]): unknown },
-  options: Options,
-) {
-  let name = "";
-  if (toStringTag && toStringTag in value) {
-    name = value[toStringTag] as string;
-  }
-  name = name || value.constructor.name;
-  // Babel transforms anonymous classes to the name `_class`
-  if (!name || name === "_class") {
-    name = "<Anonymous Class>";
-  }
-  options.truncate -= name.length;
-  return `${name}${inspectObject(value, options)}`;
+interface Ctor {
+  new (...args: any[]): unknown
 }
+
+const inspectClass: InspectFn<Ctor> = (value, options) => {
+  const toStringTag = value[Symbol.toStringTag as keyof typeof value];
+  let name = value.constructor?.name;
+  if (!name)
+    return "<Anonymous> {}";
+
+  if (toStringTag)
+    name += ` [${toStringTag}]`;
+
+  return `${name} ${inspectObject(value, options)}`;
+}
+
+export default inspectClass;

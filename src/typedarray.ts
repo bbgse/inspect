@@ -4,7 +4,7 @@ import {
   truncate,
   truncator,
 } from "./helpers.js";
-import type { Inspect, Options } from "./types.js";
+import { InspectFn } from "./options.js";
 
 type TypedArray =
   | Int8Array
@@ -29,27 +29,24 @@ const getArrayName = (array: TypedArray) => {
   return array.constructor.name;
 };
 
-export default function inspectTypedArray(
-  array: TypedArray,
-  options: Options,
-): string {
-  const name = getArrayName(array);
+const inspectTypedArray: InspectFn = (value, options) => {
+  const name = getArrayName(value);
   options.truncate -= name.length + 4;
   // Object.keys will always output the Array indices first, so we can slice by
   // `array.length` to get non-index properties
-  const nonIndexProperties = Object.keys(array).slice(array.length);
-  if (!array.length && !nonIndexProperties.length) return `${name}[]`;
+  const nonIndexProperties = Object.keys(value).slice(value.length);
+  if (!value.length && !nonIndexProperties.length) return `${name}[]`;
   // As we know TypedArrays only contain Unsigned Integers, we can skip inspecting each one and simply
   // stylise the toString() value of them
   let output = "";
-  for (let i = 0; i < array.length; i++) {
-    const string = `${options.stylize(
-      truncate(array[i], options.truncate),
-      "number",
-    )}${i === array.length - 1 ? "" : ", "}`;
+  for (let i = 0; i < value.length; i++) {
+    const string = `${options.colorize(
+      truncate(value[i], options.truncate),
+      "number"
+    )}${i === value.length - 1 ? "" : ", "}`;
     options.truncate -= string.length;
-    if (array[i] !== array.length && options.truncate <= 3) {
-      output += `${truncator}(${array.length - array[i] + 1})`;
+    if (value[i] !== value.length && options.truncate <= 3) {
+      output += `${truncator}(${value.length - value[i] + 1})`;
       break;
     }
     output += string;
@@ -57,12 +54,14 @@ export default function inspectTypedArray(
   let propertyContents = "";
   if (nonIndexProperties.length) {
     propertyContents = inspectList(
-      nonIndexProperties.map((key) => [key, array[key as keyof typeof array]]),
+      nonIndexProperties.map((key) => [key, value[key as keyof typeof value]]),
       options,
-      inspectProperty as Inspect,
+      inspectProperty as InspectFn
     );
   }
   return `${name}[ ${output}${
     propertyContents ? `, ${propertyContents}` : ""
   } ]`;
-}
+};
+
+export default inspectTypedArray;

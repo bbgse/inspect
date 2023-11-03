@@ -1,5 +1,5 @@
 import { inspectList, inspectProperty, truncate } from "./helpers.js";
-import type { Inspect, Options } from "./types.js";
+import { InspectFn } from "./options.js";
 
 const errorKeys = [
   "stack",
@@ -14,7 +14,7 @@ const errorKeys = [
   "description",
 ];
 
-export default function inspectObject(error: Error, options: Options) {
+const inspectObject: InspectFn<Error> = (error, options) => {
   const properties = Object.getOwnPropertyNames(error).filter(
     (key) => errorKeys.indexOf(key) === -1,
   );
@@ -31,9 +31,13 @@ export default function inspectObject(error: Error, options: Options) {
   const propertyContents = inspectList(
     properties.map((key) => [key, error[key as keyof typeof error]]),
     options,
-    inspectProperty as Inspect,
+    inspectProperty as InspectFn,
   );
+
+  // TODO: colorize?
   return `${name}${message}${
     propertyContents ? ` { ${propertyContents} }` : ""
   }`;
 }
+
+export default inspectObject;

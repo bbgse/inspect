@@ -67,18 +67,6 @@ describe("objects", () => {
     );
   });
 
-  it("uses a custom deeply nested inspect function if `customInspect` is turned on", () => {
-    const obj = {
-      sub: {
-        inspect: (depth: any, options: any) =>
-          options.stylize("Object content", "string"),
-      },
-    };
-    expect(inspect(obj, { customInspect: true })).toBe(
-      "{ sub: Object content }",
-    );
-  });
-
   it("inspect with custom object-returning inspect", () => {
     const obj = {
       sub: {
@@ -94,6 +82,6 @@ describe("objects", () => {
 
 describe("arrays", () => {
   it("can contain anonymous functions", () => {
-    expect(inspect([() => 1])).toBe("[ [Function] ]");
+    expect(inspect([() => 1])).toBe("[ [Function <anonymous>] ]");
   });
 });

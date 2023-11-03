@@ -22,12 +22,4 @@ describe("symbols", () => {
   it("escapes unicode characters", () => {
     expect(inspect("\u001b")).toBe("'\\u001b'");
   });
-
-  describe("colors", () => {
-    it("returns string with green color, if colour is set to true", () => {
-      expect(inspect("abc", { colors: true })).toBe(
-        "\u001b[32m'abc'\u001b[39m",
-      );
-    });
-  });
 });

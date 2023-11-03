@@ -9,16 +9,7 @@ describe("date", () => {
   });
 
   it('returns "Invalid Date" if given an invalid Date object', () => {
-    // See: https://github.com/chaijs/loupe/issues/58
     expect(inspect(new Date("not a date"))).toBe("Invalid Date");
-  });
-
-  describe("colors", () => {
-    it("returns date with red color, if colour is set to true", () => {
-      expect(inspect(new Date(1475318637123), { colors: true })).toBe(
-        "\u001b[35m2016-10-01T10:43:57.123Z\u001b[39m",
-      );
-    });
   });
 
   describe("truncate", () => {

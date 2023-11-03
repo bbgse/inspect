@@ -1,18 +1,18 @@
 import { inspectList } from "./helpers.js";
-import type { Inspect, Options } from "./types.js";
+import { InspectFn, Options } from "./options.js";
 
 function inspectMapEntry(
   [key, value]: [unknown, unknown],
-  options: Options,
+  options: Options
 ): string {
   options.truncate -= 4;
-  key = options.inspect(key, options);
+  key = options.inspect!(key, options);
   options.truncate -= (key as string).length;
-  value = options.inspect(value, options);
+  value = options.inspect!(value, options);
   return `${key} => ${value}`;
 }
 
-// IE11 doesn't support `map.entries()`
+// TODO: remove
 function mapToEntries<K, V>(map: Map<K, V>): Array<[K, V]> {
   const entries: Array<[K, V]> = [];
   map.forEach((value, key) => {
@@ -21,18 +21,19 @@ function mapToEntries<K, V>(map: Map<K, V>): Array<[K, V]> {
   return entries;
 }
 
-export default function inspectMap(
-  map: Map<unknown, unknown>,
-  options: Options,
-): string {
+const inspectMap: InspectFn<Map<unknown, unknown>> = (map, options) => {
   const size = map.size - 1;
   if (size <= 0) {
     return "Map(0) {}";
   }
   options.truncate -= 7;
+
+  // TODO: colorize?
   return `Map(${map.size}) { ${inspectList(
     mapToEntries(map),
     options,
-    inspectMapEntry as Inspect,
+    inspectMapEntry as InspectFn
   )} }`;
-}
+};
+
+export default inspectMap;

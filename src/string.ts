@@ -1,10 +1,10 @@
 import { truncate } from "./helpers.js";
-import type { Options } from "./types.js";
+import { InspectFn } from "./options.js";
 
 const stringEscapeChars = new RegExp(
   "['\\u0000-\\u001f\\u007f-\\u009f\\u00ad\\u0600-\\u0604\\u070f\\u17b4\\u17b5" +
     "\\u200c-\\u200f\\u2028-\\u202f\\u2060-\\u206f\\ufeff\\ufff0-\\uffff]",
-  "g",
+  "g"
 );
 
 const escapeCharacters = {
@@ -26,15 +26,14 @@ function escape(char: string): string {
   );
 }
 
-export default function inspectString(
-  string: string,
-  options: Options,
-): string {
-  if (stringEscapeChars.test(string)) {
-    string = string.replace(stringEscapeChars, escape);
+const inspectString: InspectFn<string> = (value, options) => {
+  if (stringEscapeChars.test(value)) {
+    value = value.replace(stringEscapeChars, escape);
   }
-  return options.stylize(
-    `'${truncate(string, options.truncate - 2)}'`,
-    "string",
+  return options.colorize(
+    `'${truncate(value, options.truncate - 2)}'`,
+    "string"
   );
-}
+};
+
+export default inspectString;

@@ -1,13 +1,19 @@
 import { truncate } from "./helpers.js";
-import type { Options } from "./types.js";
+import { InspectFn } from "./options.js";
 
-export default function inspectFunction(func: Function, options: Options) {
-  const name = func.name;
+const getFunctionName = (fn: Function) => fn.name || "<anonymous>";
+
+const inspectFunction: InspectFn<Function> = (func, options) => {
+  const name = getFunctionName(func);
+
   if (!name) {
-    return options.stylize("[Function]", "special");
+    return options.colorize("[Function]", "special");
   }
-  return options.stylize(
+
+  return options.colorize(
     `[Function ${truncate(name, options.truncate - 11)}]`,
-    "special",
+    "special"
   );
-}
+};
+
+export default inspectFunction;

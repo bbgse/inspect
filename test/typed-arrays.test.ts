@@ -1,4 +1,4 @@
-import { expect, describe, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import inspect from "../src";
 
 describe("typed arrays", () => {
@@ -225,9 +225,7 @@ describe("typed arrays", () => {
       (TypedArray) => {
         const arr: any = new TypedArray([1, 2, 3]);
         arr.foo = "bar";
-        expect(inspect(arr)).toBe(
-          `${TypedArray.name}[ 1, 2, 3, foo: 'bar' ]`
-        );
+        expect(inspect(arr)).toBe(`${TypedArray.name}[ 1, 2, 3, foo: 'bar' ]`);
       }
     );
   });

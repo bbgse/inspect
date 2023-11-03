@@ -4,12 +4,12 @@ import inspect from "../src";
 describe("classes", () => {
   class Foo {}
   it("returns constructor name with object literal notation for an empty class", () => {
-    expect(inspect(new Foo())).toBe("Foo{}");
+    expect(inspect(new Foo())).toBe("Foo {}");
   });
 
   it("returns `<Anonymous Class>{}` for anonymous classes", () => {
     const anon = () => class {};
-    expect(inspect(new (anon())())).toBe("<Anonymous Class>{}");
+    expect(inspect(new (anon())())).toBe("<Anonymous> {}");
   });
 
   it("returns toStringTag value as name if present", () => {
@@ -19,7 +19,7 @@ describe("classes", () => {
       }
     }
     const bar = new Bar();
-    expect(inspect(bar)).toBe("Baz{}");
+    expect(inspect(bar)).toBe("Bar [Baz] {}");
   });
 
   describe("properties", () => {
@@ -27,13 +27,13 @@ describe("classes", () => {
       const foo: any = new Foo();
       foo.bar = 1;
       foo.baz = "hello";
-      expect(inspect(foo)).toBe("Foo{ bar: 1, baz: 'hello' }");
+      expect(inspect(foo)).toBe("Foo { bar: 1, baz: 'hello' }");
     });
 
     it("inspects and outputs Symbols", () => {
       const foo: any = new Foo();
       foo[Symbol("foo")] = 1;
-      expect(inspect(foo)).toBe("Foo{ [Symbol(foo)]: 1 }");
+      expect(inspect(foo)).toBe("Foo { [Symbol(foo)]: 1 }");
     });
   });
 });

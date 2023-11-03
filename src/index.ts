@@ -15,35 +15,42 @@ import inspectObject from "./object.js";
 import inspectArguments from "./arguments.js";
 import inspectError from "./error.js";
 
-import { normalizeOptions } from "./helpers.js";
-import type { Inspect, Options } from "./types.js";
+import { mergeOptions, type InspectFn, type Options } from "./options.js";
+import {
+  getTypeName,
+  isClass,
+  isInstanceOfClass,
+  isObject,
+  isPlainObject,
+  toString,
+} from "./helpers.js";
 
-const symbolsSupported =
-  typeof Symbol === "function" && typeof Symbol.for === "function";
-const chaiInspect = symbolsSupported
-  ? Symbol.for("chai/inspect")
-  : "@@chai/inspect";
-let nodeInspect: false | symbol = false;
-try {
-  // eslint-disable-next-line global-require
-  // @ts-ignore
-  const nodeUtil = require("util");
-  nodeInspect = nodeUtil.inspect ? nodeUtil.inspect.custom : false;
-} catch (noNodeInspect) {
-  nodeInspect = false;
+interface CtorFn {
+  new (...args: unknown[]): unknown;
 }
 
-const constructorMap = new WeakMap<Function, Inspect>();
-const stringTagMap: Record<string, Inspect> = {};
-const baseTypesMap = {
-  undefined: (value: undefined, options: Options) =>
-    options.stylize("undefined", "undefined"),
-  null: (value: null, options: Options) => options.stylize("null", "null"),
+const inspectors: Record<string, InspectFn<any>> = {
+  undefined: (value, options) => options.colorize("undefined", "undefined"),
+  null: (_, options) => options.colorize("null", "null"),
+  boolean: (value: boolean, options) =>
+    options.colorize(String(value), "boolean"),
+  number: inspectNumber,
+  bigint: inspectBigInt,
+  string: inspectString,
+  function: inspectFunction,
+  symbol: inspectSymbol,
+  Array: inspectArray,
+};
+
+const constructorMap = new WeakMap<CtorFn, InspectFn>();
+const stringTagMap: Record<string, InspectFn> = {};
+const baseTypesMap: Record<string, InspectFn> = {
+  undefined: (_, options) => options.colorize("undefined", "undefined"),
+  null: (_, options) => options.colorize("null", "null"),
 
   boolean: (value: boolean, options: Options) =>
-    options.stylize(String(value), "boolean"),
-  Boolean: (value: Boolean, options: Options) =>
-    options.stylize(String(value), "boolean"),
+    options.colorize(String(value), "boolean"),
+  Boolean: (value, options) => options.colorize(String(value), "boolean"),
 
   number: inspectNumber,
   Number: inspectNumber,
@@ -66,13 +73,13 @@ const baseTypesMap = {
   Map: inspectMap,
   Set: inspectSet,
   RegExp: inspectRegExp,
-  Promise: inspectPromise,
+  Promise: inspectPromise as InspectFn<Promise<unknown>>,
 
   // WeakSet, WeakMap are totally opaque to us
-  WeakSet: (value: WeakSet<any>, options: Options) =>
-    options.stylize("WeakSet{…}", "special"),
-  WeakMap: (value: WeakMap<any, unknown>, options: Options) =>
-    options.stylize("WeakMap{…}", "special"),
+  WeakSet: <T extends object>(_: WeakSet<T>, options: Options) =>
+    options.colorize("WeakSet{…}", "special"),
+  WeakMap: <T extends object>(_: WeakMap<T, unknown>, options: Options) =>
+    options.colorize("WeakMap{…}", "special"),
 
   Arguments: inspectArguments,
   Int8Array: inspectTypedArray,
@@ -92,33 +99,15 @@ const baseTypesMap = {
   Error: inspectError,
 } as const;
 
-// eslint-disable-next-line complexity
+type CustomInspectValue = any | { inspect?: InspectFn };
+
 const inspectCustom = (
-  value: object,
+  value: CustomInspectValue,
   options: Options,
-  type: string,
+  type: string
 ): string => {
-  if (
-    chaiInspect in value &&
-    typeof (value as any)[chaiInspect] === "function"
-  ) {
-    return ((value as any)[chaiInspect] as Function)(options);
-  }
-
-  if (
-    nodeInspect &&
-    nodeInspect in value &&
-    typeof (value as any)[nodeInspect] === "function"
-  ) {
-    return ((value as any)[nodeInspect] as Function)(options.depth, options);
-  }
-
   if ("inspect" in value && typeof value.inspect === "function") {
     return value.inspect(options.depth, options);
-  }
-
-  if ("constructor" in value && constructorMap.has(value.constructor)) {
-    return constructorMap.get(value.constructor)!(value, options);
   }
 
   if (stringTagMap[type]) {
@@ -128,25 +117,21 @@ const inspectCustom = (
   return "";
 };
 
-const toString = Object.prototype.toString;
+export const inspect = (
+  value: unknown,
+  opts: Partial<Options> = {}
+): string => {
+  const type = getTypeName(value);
+  const options = mergeOptions({ ...opts, inspect });
 
-export function inspect(value: unknown, opts: Partial<Options> = {}): string {
-  const options = normalizeOptions(opts, inspect);
-  const { customInspect } = options;
-  let type = value === null ? "null" : typeof value;
-  if (type === "object") {
-    type = toString.call(value).slice(8, -1);
-  }
-
-  // If it is a base value that we already support, then use Loupe's inspector
+  // If it is a base value that we already support
   if (type in baseTypesMap) {
-    return (baseTypesMap[type as keyof typeof baseTypesMap] as Inspect)(
-      value,
-      options,
-    );
+    const fn = baseTypesMap[type as keyof typeof baseTypesMap];
+    return fn(value, options);
   }
 
   // If `options.customInspect` is set to true then try to use the custom inspector
+  const { customInspect } = options;
   if (customInspect && value) {
     const output = inspectCustom(value, options, type);
     if (output) {
@@ -155,47 +140,41 @@ export function inspect(value: unknown, opts: Partial<Options> = {}): string {
     }
   }
 
-  const proto = value ? Object.getPrototypeOf(value) : false;
-  // If it's a plain Object then use Loupe's inspector
-  if (proto === Object.prototype || proto === null) {
-    return inspectObject(value as object, options);
+  if (isPlainObject(value)) {
+    return inspectObject(value, options);
   }
 
-  if ("constructor" in (value as object)) {
-    // If it is a class, inspect it like an object but add the constructor name
-    if ((value as object).constructor !== Object) {
-      return inspectClass(value as { new (...args: any[]): unknown }, options);
-    }
-
-    // If it is an object with an anonymous prototype, display it as an object.
-    return inspectObject(value as object, options);
+  // If it is a class, inspect it like an object but add the constructor name
+  if (isInstanceOfClass(value)) {
+    return inspectClass(value, options);
   }
 
-  // last chance to check if it's an object
-  if (value === Object(value)) {
-    return inspectObject(value as object, options);
+  // If it is an object with an anonymous prototype, display it as an object.
+  if (isObject(value)) {
+    return inspectObject(value, options);
   }
 
   // We have run out of options! Just stringify the value
-  return (options as Options).stylize(String(value), type);
-}
+  return options.colorize(String(value), "string");
+};
 
-export function registerConstructor(constructor: Function, inspector: Inspect) {
-  if (constructorMap.has(constructor)) {
+export function registerInspector(ctor: CtorFn, inspector: InspectFn) {
+  if (isClass(ctor)) {
     return false;
   }
-  constructorMap.set(constructor, inspector);
+  if (constructorMap.has(ctor)) {
+    return false;
+  }
+  constructorMap.set(ctor, inspector);
   return true;
 }
 
-export function registerStringTag(stringTag: string, inspector: Inspect) {
+export function registerStringTag(stringTag: string, inspector: InspectFn) {
   if (stringTag in stringTagMap) {
     return false;
   }
   stringTagMap[stringTag] = inspector;
   return true;
 }
-
-export const custom = chaiInspect;
 
 export default inspect;

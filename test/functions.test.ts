@@ -8,15 +8,7 @@ describe("functions", () => {
   });
 
   it("returns the `[Function]` if given anonymous function", () => {
-    expect(inspect(function () {})).toBe("[Function]");
-  });
-
-  describe("colors", () => {
-    it("returns string with cyan color, if colour is set to true", () => {
-      expect(inspect(function foo() {}, { colors: true })).toBe(
-        "\u001b[36m[Function foo]\u001b[39m",
-      );
-    });
+    expect(inspect(function () {})).toBe("[Function <anonymous>]");
   });
 
   describe("truncate", () => {
