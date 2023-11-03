@@ -18,12 +18,12 @@ const inspectObject: InspectFn<object> = (value, options) => {
   const propertyContents = inspectList(
     properties.map((key) => [key, value[key as keyof typeof value]]),
     options,
-    inspectProperty as InspectFn
+    inspectProperty as InspectFn,
   );
   const symbolContents = inspectList(
     symbols.map((key) => [key, value[key as keyof typeof value]]),
     options,
-    inspectProperty as InspectFn
+    inspectProperty as InspectFn,
   );
   options.seen.pop();
   let sep = "";

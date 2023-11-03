@@ -12,7 +12,7 @@ const inspectFunction: InspectFn<Function> = (func, options) => {
 
   return options.colorize(
     `[Function ${truncate(name, options.truncate - 11)}]`,
-    "special"
+    "special",
   );
 };
 

@@ -2,7 +2,7 @@ import { ColorizeFn, colorize } from "./colors";
 
 export type InspectFn<T = any, TOptions = Options> = (
   value: T,
-  options: TOptions
+  options: TOptions,
 ) => string;
 
 export interface Options {

@@ -3,7 +3,7 @@ import { InspectFn, Options } from "./options.js";
 
 function inspectMapEntry(
   [key, value]: [unknown, unknown],
-  options: Options
+  options: Options,
 ): string {
   options.truncate -= 4;
   key = options.inspect!(key, options);
@@ -32,7 +32,7 @@ const inspectMap: InspectFn<Map<unknown, unknown>> = (map, options) => {
   return `Map(${map.size}) { ${inspectList(
     mapToEntries(map),
     options,
-    inspectMapEntry as InspectFn
+    inspectMapEntry as InspectFn,
   )} }`;
 };
 

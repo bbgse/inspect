@@ -3,9 +3,7 @@ import inspect from "../src";
 
 describe("date", () => {
   it("returns date in iso format", () => {
-    expect(inspect(new Date(1475318637123))).toBe(
-      "2016-10-01T10:43:57.123Z",
-    );
+    expect(inspect(new Date(1475318637123))).toBe("2016-10-01T10:43:57.123Z");
   });
 
   it('returns "Invalid Date" if given an invalid Date object', () => {

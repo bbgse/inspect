@@ -4,7 +4,7 @@ import inspect from "../src";
 describe("undefined", () => {
   it("returns `undefined`", () => {
     expect(inspect(undefined)).toBe("undefined");
-  })
+  });
 
   describe("truncate", () => {
     it("returns the full string representation regardless of truncate", () => {
@@ -17,6 +17,6 @@ describe("undefined", () => {
       expect(inspect(undefined, { truncate: 3 })).toBe("undefined");
       expect(inspect(undefined, { truncate: 2 })).toBe("undefined");
       expect(inspect(undefined, { truncate: 1 })).toBe("undefined");
-    })
+    });
   });
-})
+});

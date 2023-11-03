@@ -13,7 +13,7 @@ const inspectDate: InspectFn<Date> = (value, options) => {
   // If we need to - truncate the time portion, but never the date
   return options.colorize(
     `${date}T${truncate(split[1], options.truncate - date.length - 1)}`,
-    "date"
+    "date",
   );
 };
 

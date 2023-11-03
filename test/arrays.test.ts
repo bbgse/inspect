@@ -9,7 +9,7 @@ describe("arrays", () => {
   describe("truncate", () => {
     it("returns the full representation when truncate is over string length", () => {
       expect(inspect(["a", "b", "c"], { truncate: 17 })).toBe(
-        "[ 'a', 'b', 'c' ]"
+        "[ 'a', 'b', 'c' ]",
       );
     });
 

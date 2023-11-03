@@ -7,7 +7,7 @@ const inspectRegExp: InspectFn<RegExp> = (value, options) => {
   const source = value.source;
   return options.colorize(
     `/${truncate(source, sourceLength)}/${flags}`,
-    "regexp"
+    "regexp",
   );
 };
 

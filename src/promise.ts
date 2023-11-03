@@ -11,7 +11,7 @@ type GetPromiseStateResult<T> = {
 const initial: GetPromiseStateResult<unknown> = { status: "pending" };
 
 function getPromiseState<T = unknown>(
-  promise: Promise<T>
+  promise: Promise<T>,
 ): Promise<GetPromiseStateResult<T>> {
   return Promise.race([promise, initial]).then(
     (value) => {
@@ -24,13 +24,13 @@ function getPromiseState<T = unknown>(
         status: "rejected",
         value: reason,
       };
-    }
+    },
   );
 }
 
 type GetPromiseValue = (
   value: Promise<unknown>,
-  options: Options
+  options: Options,
 ) => Promise<string> | string;
 
 let getPromiseValue: GetPromiseValue = () => "Promise{…}";

@@ -38,6 +38,6 @@ const inspectObject: InspectFn<Error> = (error, options) => {
   return `${name}${message}${
     propertyContents ? ` { ${propertyContents} }` : ""
   }`;
-}
+};
 
 export default inspectObject;

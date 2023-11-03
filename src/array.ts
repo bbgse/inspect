@@ -14,7 +14,7 @@ const inspectArray: InspectFn<ArrayLike<unknown>> = (array, options) => {
     propertyContents = inspectList(
       nonIndexProperties.map((key) => [key, array[key as keyof typeof array]]),
       options,
-      inspectProperty as InspectFn
+      inspectProperty as InspectFn,
     );
   }
   return `[ ${listContents}${

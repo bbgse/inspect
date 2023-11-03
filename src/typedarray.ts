@@ -42,7 +42,7 @@ const inspectTypedArray: InspectFn = (value, options) => {
   for (let i = 0; i < value.length; i++) {
     const string = `${options.colorize(
       truncate(value[i], options.truncate),
-      "number"
+      "number",
     )}${i === value.length - 1 ? "" : ", "}`;
     options.truncate -= string.length;
     if (value[i] !== value.length && options.truncate <= 3) {
@@ -56,7 +56,7 @@ const inspectTypedArray: InspectFn = (value, options) => {
     propertyContents = inspectList(
       nonIndexProperties.map((key) => [key, value[key as keyof typeof value]]),
       options,
-      inspectProperty as InspectFn
+      inspectProperty as InspectFn,
     );
   }
   return `${name}[ ${output}${

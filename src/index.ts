@@ -104,7 +104,7 @@ type CustomInspectValue = any | { inspect?: InspectFn };
 const inspectCustom = (
   value: CustomInspectValue,
   options: Options,
-  type: string
+  type: string,
 ): string => {
   if ("inspect" in value && typeof value.inspect === "function") {
     return value.inspect(options.depth, options);
@@ -119,7 +119,7 @@ const inspectCustom = (
 
 export const inspect = (
   value: unknown,
-  opts: Partial<Options> = {}
+  opts: Partial<Options> = {},
 ): string => {
   const type = getTypeName(value);
   const options = mergeOptions({ ...opts, inspect });

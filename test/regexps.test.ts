@@ -12,21 +12,15 @@ describe("regexps", () => {
 
   describe("truncate", () => {
     it("returns the full representation when truncate is over string length", () => {
-      expect(inspect(/foobarbaz/gim, { truncate: 14 })).toBe(
-        "/foobarbaz/gim",
-      );
+      expect(inspect(/foobarbaz/gim, { truncate: 14 })).toBe("/foobarbaz/gim");
     });
 
     it("truncates strings longer than truncate (13)", () => {
-      expect(inspect(/foobarbaz/gim, { truncate: 13 })).toBe(
-        "/foobarb…/gim",
-      );
+      expect(inspect(/foobarbaz/gim, { truncate: 13 })).toBe("/foobarb…/gim");
     });
 
     it("truncates strings longer than truncate (12)", () => {
-      expect(inspect(/foobarbaz/gim, { truncate: 12 })).toBe(
-        "/foobar…/gim",
-      );
+      expect(inspect(/foobarbaz/gim, { truncate: 12 })).toBe("/foobar…/gim");
     });
     it("truncates strings longer than truncate (11)", () => {
       expect(inspect(/foobarbaz/gim, { truncate: 11 })).toBe("/fooba…/gim");

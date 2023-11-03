@@ -5,7 +5,7 @@ export const truncator = "…";
 export function truncate(
   string: string | number,
   length: number,
-  tail: string = truncator
+  tail: string = truncator,
 ) {
   string = String(string);
   const tailLength = tail.length;
@@ -22,7 +22,7 @@ export function inspectList(
   list: ArrayLike<unknown>,
   options: Options,
   inspectItem?: InspectFn,
-  separator = ", "
+  separator = ", ",
 ): string {
   inspectItem = inspectItem || options.inspect;
   const size = list.length;
@@ -99,7 +99,7 @@ function quoteComplexKey(key: string): string {
 
 export function inspectProperty(
   [key, value]: [unknown, unknown],
-  options: Options
+  options: Options,
 ): string {
   options.truncate -= 2;
   if (typeof key === "string") key = quoteComplexKey(key);
