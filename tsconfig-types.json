@@ -6,6 +6,6 @@
     "emitDeclarationOnly": true,
     "declaration": true,
     "declarationMap": false,
-    "declarationDir": "lib",
+    "declarationDir": "lib"
   }
 }

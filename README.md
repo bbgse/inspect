@@ -14,15 +14,15 @@
 
 ## Usage
 
-``` js
-import inspect from '@bbgse/inspect';
+```js
+import inspect from "@bbgse/inspect";
 ```
 
 ```ts
-inspect({ foo: 'bar' }); // => "{ foo: 'bar' }"
+inspect({ foo: "bar" }); // => "{ foo: 'bar' }"
 inspect(1); // => '1'
-inspect('foo'); // => "'foo'"
-inspect([ 1, 2, 3 ]); // => '[ 1, 2, 3 ]'
+inspect("foo"); // => "'foo'"
+inspect([1, 2, 3]); // => '[ 1, 2, 3 ]'
 inspect(/Test/g); // => '/Test/g'
 
 // ...
@@ -31,6 +31,7 @@ inspect(/Test/g); // => '/Test/g'
 ## License
 
 ### The MIT License (MIT)
+
 Copyright © 2023 `bbgse`
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
