@@ -18,33 +18,16 @@ import inspectError from "./error.js";
 import { mergeOptions, type InspectFn, type Options } from "./options.js";
 import {
   getTypeName,
-  isClass,
   isInstanceOfClass,
   isObject,
   isPlainObject,
-  toString,
 } from "./helpers.js";
 
 interface CtorFn {
   new (...args: unknown[]): unknown;
 }
 
-const inspectors: Record<string, InspectFn<any>> = {
-  undefined: (value, options) => options.colorize("undefined", "undefined"),
-  null: (_, options) => options.colorize("null", "null"),
-  boolean: (value: boolean, options) =>
-    options.colorize(String(value), "boolean"),
-  number: inspectNumber,
-  bigint: inspectBigInt,
-  string: inspectString,
-  function: inspectFunction,
-  symbol: inspectSymbol,
-  Array: inspectArray,
-};
-
-const constructorMap = new WeakMap<CtorFn, InspectFn>();
-const stringTagMap: Record<string, InspectFn> = {};
-const baseTypesMap: Record<string, InspectFn> = {
+const inspectors: Record<string, InspectFn> = {
   undefined: (_, options) => options.colorize("undefined", "undefined"),
   null: (_, options) => options.colorize("null", "null"),
 
@@ -65,7 +48,6 @@ const baseTypesMap: Record<string, InspectFn> = {
   Function: inspectFunction,
 
   symbol: inspectSymbol,
-  // A Symbol polyfill will return `Symbol` not `symbol` from typedetect
   Symbol: inspectSymbol,
 
   Array: inspectArray,
@@ -97,21 +79,17 @@ const baseTypesMap: Record<string, InspectFn> = {
   ArrayBuffer: () => "",
 
   Error: inspectError,
-} as const;
+};
 
 type CustomInspectValue = any | { inspect?: InspectFn };
 
 const inspectCustom = (
   value: CustomInspectValue,
   options: Options,
-  type: string,
+  type: string
 ): string => {
   if ("inspect" in value && typeof value.inspect === "function") {
     return value.inspect(options.depth, options);
-  }
-
-  if (stringTagMap[type]) {
-    return stringTagMap[type](value, options);
   }
 
   return "";
@@ -119,14 +97,14 @@ const inspectCustom = (
 
 export const inspect = (
   value: unknown,
-  opts: Partial<Options> = {},
+  opts: Partial<Options> = {}
 ): string => {
   const type = getTypeName(value);
   const options = mergeOptions({ ...opts, inspect });
 
   // If it is a base value that we already support
-  if (type in baseTypesMap) {
-    const fn = baseTypesMap[type as keyof typeof baseTypesMap];
+  if (type in inspectors) {
+    const fn = inspectors[type as keyof typeof inspectors];
     return fn(value, options);
   }
 
@@ -158,22 +136,17 @@ export const inspect = (
   return options.colorize(String(value), "string");
 };
 
-export function registerInspector(ctor: CtorFn, inspector: InspectFn) {
-  if (isClass(ctor)) {
+/**
+ * Register a custom inspector function for a given type.
+ * @param type The string tag of the object, ex "Array", "Map", "Set", etc.
+ * @param inspector The inspector function to use for the object
+ */
+export function registerInspector(type: string, inspector: InspectFn) {
+  if (type in inspectors) {
     return false;
   }
-  if (constructorMap.has(ctor)) {
-    return false;
-  }
-  constructorMap.set(ctor, inspector);
-  return true;
-}
 
-export function registerStringTag(stringTag: string, inspector: InspectFn) {
-  if (stringTag in stringTagMap) {
-    return false;
-  }
-  stringTagMap[stringTag] = inspector;
+  inspectors[type] = inspector;
   return true;
 }
 

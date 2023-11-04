@@ -25,15 +25,13 @@
   ],
   "scripts": {
     "test": "vitest",
-    "compile": "tsc -p tsconfig.json",
+    "compile": "tsc -p tsconfig.json --noEmit",
     "clean": "rm -rf lib",
-    "build": "npm run clean && npm run build:cjs && npm run build:types",
-    "build:esm": "esbuild src/index.ts --outfile=lib/index.mjs --sourcemap --bundle --platform=node --target=node18 --format=esm",
-    "build:cjs": "esbuild src/index.ts --outfile=lib/index.cjs --sourcemap --bundle --platform=node --target=node18 --format=cjs",
-    "build:types": "tsc -p tsconfig-types.json",
+    "build": "unbuild",
     "release": "bumpp && npm publish",
     "prepare": "simple-git-hooks",
-    "format": "prettier --write .",
+    "format:all": "prettier --write .",
+    "format:staged": "git diff --name-only HEAD | xargs -I {} prettier --write \"{}\"",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
@@ -50,8 +48,5 @@
     "typescript": "^5.2.2",
     "unbuild": "^2.0.0",
     "vitest": "^0.34.6"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "npx prettier --check ."
   }
 }
