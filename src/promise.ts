@@ -43,7 +43,7 @@ try {
       return "Promise{<pending>}";
     }
     if (status === "rejected") {
-      throw `Promise{<rejected> ${inspect(value, options)}}`;
+      return `Promise{<rejected> ${inspect(value, options)}}`;
     }
 
     if (value) {

@@ -8,7 +8,7 @@ describe("promises", () => {
     });
 
     it("returns `Promise{<rejected> …}` for a rejected Promise", async () => {
-      await expect(inspect(Promise.reject(new Error("Foo!")))).rejects.toBe(
+      await expect(inspect(Promise.reject(new Error("Foo!")))).resolves.toBe(
         "Promise{<rejected> Error: Foo!}",
       );
     });
@@ -58,7 +58,7 @@ describe("promises", () => {
     });
 
     it('returns a "rejected" version of the Promise value if it is rejected', async () => {
-      await expect(inspect(Promise.reject(new Error("Foo")))).rejects.toBe(
+      await expect(inspect(Promise.reject(new Error("Foo")))).resolves.toBe(
         "Promise{<rejected> Error: Foo}",
       );
     });
