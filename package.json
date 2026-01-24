@@ -41,7 +41,7 @@
   "devDependencies": {
     "@types/node": "^20.8.10",
     "bumpp": "^9.2.0",
-    "esbuild": "^0.19.5",
+    "esbuild": "^0.25.0",
     "prettier": "^3.0.3",
     "simple-git-hooks": "^2.9.0",
     "ts-node": "^10.9.1",
